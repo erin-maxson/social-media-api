@@ -1,5 +1,4 @@
 const { Schema, model, Types } = require('mongoose');
-const { stringify } = require('querystring');
 
 const reactionSchema = new Schema(
     {
