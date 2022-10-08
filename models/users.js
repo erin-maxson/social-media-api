@@ -1,35 +1,35 @@
-const mongoose = require('mongoose');
+const { Schema, model } = require('mongoose');
 
-const thoughtsSchema = new mongoose.Schema({
-
-})
-
-const userSchema = new mongoose.Schema({
-  username: { type: String, required: true },
-  email: { type: String, required: true},
-  thoughts: [thoughtsSchema]
-});
-
-const Users = mongoose.model('User', userSchema);
-
-const handleError = (err) => console.error(err);
-
-Users.find({}).exec((err, collection) => {
-  if (err) {
-    return handleError(err);
+const userSchema = new Schema(
+  {
+    username: {
+      type: String,
+      required: true,
+      unique: true,
+      trim: true
+    },
+    email: {
+      type: String,
+      required: true,
+      validate: {
+        validator(validatedEmail) {
+          return /^([a-zA-Z0-9_.-]+)@([\da-z\.-]+)\.([a-z]{2,6})(\.[a-z]{2,6})?$/.test(
+            validatedEmail
+          );
+        }
+      },
+      thoughts: [{
+        type: Schema.Types.ObjectId,
+        ref: 'thought'
+      }]
+    },
+    toJSON: {
+      virtuals: true,
+      getters: true
+    },
+    id: false
   }
-  if (collection.length === 0) {
-    return Users.insertMany(
-      [
-        { username: 'airmax14', email: 'airmax1494@gmail.com' },
-        { username: 'erin.maxson', email: 'erin.maxson14@gmail.com' },
-        { username: 'rorygal', email: 'rory@gmail.com' }
-      ],
-      (insertError) =>
-        insertError ? handleError(insertError) : console.log('Inserted')
-    );
-  }
-  return console.log('Already populated');
-});
+);
 
-module.exports = Users;
+const User = model('User', userSchema);
+module.exports = User;

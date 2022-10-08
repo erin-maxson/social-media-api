@@ -34,8 +34,15 @@ const thoughtSchema = new Schema(
             maxlength: 280
         },
         reactions: [reactionSchema]
-    }
-)
+    },
+    {
+        toJSON: {
+          virtuals: true,
+          getters: true
+        },
+        id: false
+      }
+    );
 
 const thought = model('Thought', thoughtSchema);
 module.exports = thought

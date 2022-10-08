@@ -32,7 +32,7 @@ const userController = {
                 return res.status(500).json(err);
             });
     },
-    // update a user
+    // Update a user
     updateUser(req, res) {
         User.findOneAndUpdate({ _id: req.params.userId }, req.body, {
             new: true,
