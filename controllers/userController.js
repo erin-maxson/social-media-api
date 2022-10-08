@@ -12,10 +12,11 @@ const userController = {
             })
     },
     // Get a user
-    getUserId(req, res) {
+    getSingleUser(req, res) {
         User.findOne({ _id: req.params.userId })
             .select('-__v')
-            .then((thoughts) =>
+            .populate('thoughts')
+            .then((user) =>
                 !user
                     ? res.status(404).json({ message: 'No user with that ID' })
                     : res.json(user)
@@ -31,18 +32,33 @@ const userController = {
                 return res.status(500).json(err);
             });
     },
+    // update a user
+    updateUser(req, res) {
+        User.findOneAndUpdate({ _id: req.params.userId }, req.body, {
+            new: true,
+            runValidators: true,
+        })
+            .then((user) =>
+                !user
+                    ? res.status(404).json({ message: 'No user with that ID' })
+                    : res.json(user)
+            )
+            .catch((err) => res.status(500).json(err));
+    },
     // Delete a user
     deleteUser(req, res) {
         User.findOneAndDelete({ _id: req.params.userId })
             .then((user) => {
-               if (!user) {
-                   res.status(404).json({ message: 'No user with that ID' });
-                return;
-            }
-        User.updateMany(
-                { _id: { $in: user.friends } },
-                { $pull: { friends: req.params.id } }
-            )
+                if (!user) {
+                    res.status(404).json({ message: 'No user with that ID' });
+                    return;
+                }
+                //update user's friends
+                User.updateMany(
+                    { _id: { $in: user.friends } },
+                    { $pull: { friends: req.params.id } }
+                )
+                    //delete thoughts of the user
                     .then(() => {
                         Thought.deleteMany(
                             { username: user.username }
@@ -57,7 +73,7 @@ const userController = {
                     .catch((err) => {
                         res.status(500).json(err)
                     })
-
+            })
+        }
 }
-
 module.exports = userController
