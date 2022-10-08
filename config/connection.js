@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+require('dotenv').config();
 
 // Wrap Mongoose around local connection to MongoDB
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/socialmediaapi', {
