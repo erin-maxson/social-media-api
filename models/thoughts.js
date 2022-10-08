@@ -17,6 +17,11 @@ const reactionSchema = new Schema(
             required: true,
             maxlength: 280
         }
+    },
+    {
+        toJSON: {
+            getters: true
+        }
     }
 );
 
