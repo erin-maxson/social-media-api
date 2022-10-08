@@ -75,10 +75,10 @@ const userController = {
                     })
             })
         },
-    addReaction(req, res) {
-        Thought.findOneAndUpdate(
-            {_id: req.params.thoughtId},
-            { $push: {reactions: req.body}},
+    addFriend(req, res) {
+        User.findOneAndUpdate(
+            {_id: req.params.id},
+            { $push: {friends: req.params.friendId}},
             {new: true}
         )
             .then((user)=> {
@@ -90,10 +90,10 @@ const userController = {
                 res.status(500).json(err)
             })
     },
-    deleteReaction(req, res) {
-        Thought.findOneAndDelete(
+    deleteFriend(req, res) {
+        User.findOneAndDelete(
             { _id: req.params.thoughtId},
-            { $pull: {reactions: {reactionId: req.params.reactionId}}},
+            { $pull: {friends: {friendId: req.params.friendId}}},
             {new: true}
         )
             .then((user) => {
