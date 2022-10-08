@@ -1,11 +1,11 @@
-const mongoose = require('mongoose');
-require('dotenv').config();
+const {connect, connection} = require('mongoose');
+require("dotenv").config();
 
 // Wrap Mongoose around local connection to MongoDB
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/socialmediaapi', {
+connect(process.env.MONGODB_URI || 'mongodb://localhost/socialmediaapi', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
 
 // Export connection 
-module.exports = mongoose.connection;
+module.exports = connection;
