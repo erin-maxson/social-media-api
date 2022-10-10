@@ -1,4 +1,5 @@
 const { Schema, model, Types } = require('mongoose');
+const { stringify } = require('querystring');
 
 const reactionSchema = new Schema(
     {
@@ -7,7 +8,7 @@ const reactionSchema = new Schema(
             default: () => new Types.ObjectId(),
         },
         username: {
-            type: stringify,
+            type: String,
             required: true,
             trim: true
         },
