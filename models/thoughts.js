@@ -1,5 +1,4 @@
 const { Schema, model, Types } = require('mongoose');
-const { stringify } = require('querystring');
 
 const reactionSchema = new Schema(
     {
@@ -48,6 +47,10 @@ const thoughtSchema = new Schema(
         id: false
       }
     );
+
+thoughtSchema.virtual("reactionCount").get(function () {
+    return this.reactions.length;
+});
 
 const thought = model('Thought', thoughtSchema);
 module.exports = thought
